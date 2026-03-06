@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createBond } from "../../api/bond";
-
+import { getTrainings } from "../../api/training";
+import type { Training } from "../../types/trainings";
+import { getEmployees } from "../../api/employees";
+import type { Employee } from "../../types/employees";
 export default function BondForm() {
   const [form, setForm] = useState({
     employeeId: "",
@@ -12,7 +15,28 @@ export default function BondForm() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [trainings, setTrainings] = useState<Training[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  useEffect(() => {
+    const fetchTrainings = async () => {
+      const data = await getTrainings();
+      setTrainings(data);
+    };
 
+    fetchTrainings();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const trainingsData = await getTrainings();
+      const employeesData = await getEmployees();
+
+      setTrainings(trainingsData);
+      setEmployees(employeesData);
+    };
+
+    fetchData();
+  }, []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -56,25 +80,38 @@ export default function BondForm() {
       <h3 className="text-lg font-semibold mb-4">Create Bond</h3>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-        <input
-          type="text"
+        <select
           name="employeeId"
-          placeholder="Employee UUID"
-          className="border rounded px-3 py-2"
           value={form.employeeId}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="text"
-          name="trainingId"
-          placeholder="Training UUID"
+          onChange={(e) => setForm({ ...form, employeeId: e.target.value })}
           className="border rounded px-3 py-2"
-          value={form.trainingId}
-          onChange={handleChange}
           required
-        />
+        >
+          <option value="">Select Employee</option>
+
+          {employees.map((employee) => (
+            <option key={employee.id} value={employee.id}>
+              {employee.employeeNumber} — {employee.firstName}{" "}
+              {employee.lastName} ({employee.department})
+            </option>
+          ))}
+        </select>
+
+        <select
+          name="trainingId"
+          value={form.trainingId}
+          onChange={(e) => setForm({ ...form, trainingId: e.target.value })}
+          className="border rounded px-3 py-2"
+          required
+        >
+          <option value="">Select Training</option>
+
+          {trainings.map((training) => (
+            <option key={training.id} value={training.id}>
+              {training.title} — {training.provider}
+            </option>
+          ))}
+        </select>
 
         <input
           type="number"

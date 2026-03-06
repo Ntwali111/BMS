@@ -1,4 +1,4 @@
-import { Bond } from "../../types/bonds";
+import type { Bond } from "../../types/bonds";
 
 interface Props {
   bonds: Bond[];

@@ -1,6 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login", { replace: true });
+  };
   return (
     <nav className="bg-gray-900 text-white px-6 py-4 shadow-md">
       <div className="flex justify-between items-center">
@@ -16,6 +22,15 @@ export default function Navbar() {
           <Link to="/bonds" className="hover:text-blue-400 transition">
             Bonds
           </Link>
+          <Link to="/employees" className="hover:text-blue-400 transition">
+            Employees
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="hover:text-red-400 transition"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </nav>

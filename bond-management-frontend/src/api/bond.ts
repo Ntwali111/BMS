@@ -1,7 +1,6 @@
-import axios from "axios";
+import api from "./axios";
 
-const API_URL = "http://127.0.0.1:3000/bonds";
-
+/* CREATE BOND */
 export const createBond = async (data: {
   employeeId: string;
   trainingId: string;
@@ -10,11 +9,12 @@ export const createBond = async (data: {
   startDate: string;
   documentUrl: string;
 }) => {
-  const response = await axios.post(API_URL, data);
+  const response = await api.post("/bonds", data);
   return response.data;
 };
 
+/* GET ALL BONDS */
 export const getBonds = async () => {
-  const response = await axios.get(API_URL);
+  const response = await api.get("/bonds");
   return response.data;
 };

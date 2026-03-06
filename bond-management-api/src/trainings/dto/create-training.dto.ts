@@ -16,6 +16,7 @@ export class CreateTrainingDto {
   provider: string;
 
   @IsNumberString()
+  @IsNotEmpty()
   cost: string;
 
   @IsOptional()

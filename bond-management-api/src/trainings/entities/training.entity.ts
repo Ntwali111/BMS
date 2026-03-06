@@ -10,14 +10,18 @@ export class Training {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   title: string;
 
-  @Column()
+  @Column({ nullable: false })
   provider: string;
 
-  // NUMERIC returns as string in pg driver
-  @Column({ type: "numeric", precision: 14, scale: 2 })
+  @Column({
+    type: "numeric",
+    precision: 14,
+    scale: 2,
+    nullable: false,
+  })
   cost: string;
 
   @Column({ name: "start_date", type: "date", nullable: true })

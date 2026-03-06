@@ -6,9 +6,11 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
+  const token = localStorage.getItem("token");
+
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar />
+      {token && <Navbar />}
       <main className="p-8">{children}</main>
     </div>
   );
